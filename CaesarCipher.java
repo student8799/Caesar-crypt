@@ -35,8 +35,6 @@ public class CaesarCipher {
             case 0 :
                 break;
         }
-
-
     }
 
     public static void decoder(String input, String output, int key) {
@@ -48,10 +46,10 @@ public class CaesarCipher {
                     int num = Character.toLowerCase(reader.read());
                     for (int i = 0; i < ALFABET.length; i++) {
                         if (num == ALFABET[i]) {
-                            if (i == 0) {
-                                i = ALFABET.length;
-                            }
                             int decryptIndex = (i - key) % ALFABET.length;
+                            if (decryptIndex < 0) {
+                                decryptIndex = ALFABET.length + ((i - key) % ALFABET.length);
+                            }
                             writer.write(ALFABET[decryptIndex]);
                         }
                     }
@@ -64,7 +62,7 @@ public class CaesarCipher {
 
     public static void coder(String input, String output, int key) {
         Path path = Path.of(input);
-        if (Files.exists(path) && (key > 0 && key < ALFABET.length - 1)) {
+        if (Files.exists(path) && (key > 0 && key < ALFABET.length)) {
             try (FileReader reader = new FileReader(path.toFile());
                  FileWriter writer = new FileWriter(output)) {
                 while (reader.ready()) {
